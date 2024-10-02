@@ -8,7 +8,7 @@ const AppRoutes = () => {
   return (
     <Routes>
       <Route path="/login" element={<LoginPage />} />
-      <Route path="/postit/:id" element={<ProfilePage />} />
+      <Route path="/postit/profile/:id" element={<ProfilePage />} />
       <Route path="*" element={<Navigate to="/login" />} />
     </Routes>
   );
