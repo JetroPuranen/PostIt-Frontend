@@ -13,4 +13,5 @@ export interface UserDetailData {
     username?: string;
     firstName?: string;
     surName?: string;
+    profilePictureUrl?: string;
 }
