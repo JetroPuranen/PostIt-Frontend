@@ -10,6 +10,7 @@ export interface UserRegistrationData {
   }
 
 export interface UserDetailData {
+    userId: string;
     username?: string;
     firstName?: string;
     surName?: string;

@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { loginUser } from '../api/auth';
-import { saveTokenAndUserId } from '../services/authService';
+import { saveTokenAndUserId, clearAuthData } from '../services/authService'; // Import clearAuthData
 import RegisterUser from '../components/RegisterUser';
 
 const LoginPage = () => {
@@ -15,6 +15,9 @@ const LoginPage = () => {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
+      // Clear existing auth data before logging in
+      clearAuthData(); 
+
       const response = await loginUser(username, password);
       if (response.token && response.userId) {
         saveTokenAndUserId(response.token, response.userId);

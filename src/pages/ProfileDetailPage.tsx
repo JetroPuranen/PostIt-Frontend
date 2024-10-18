@@ -1,15 +1,14 @@
-
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { getUserData, getUserProfilePicture } from '../api/getUserData';
 import { getPostsByUser } from '../api/getPosts'; 
-import { getUserId } from '../services/authService';
 import { UserDetailData } from '../models/user';
 import { Post } from '../models/post';
 import PostGrid from '../components/PostGrid';
 import PostModal from '../components/PostModal';
 
-const ProfilePage = () => {
+const ProfileDetailPage = () => {
+    const { id } = useParams<{ id: string }>(); // Get the user ID from the route
     const [userDetails, setUserDetails] = useState<UserDetailData | null>(null);
     const [profilePictureUrl, setProfilePictureUrl] = useState<string | null>(null);
     const [posts, setPosts] = useState<Post[]>([]);
@@ -20,19 +19,17 @@ const ProfilePage = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        const userId = getUserId();
-        if (!userId) {
-            setError('User not logged in.');
-            navigate('/login');
+        if (!id) {
+            setError('User ID is missing.');
             return;
         }
 
         const fetchUserData = async () => {
             try {
                 const [data, profilePictureResponse, userPosts] = await Promise.all([
-                    getUserData(userId),
-                    getUserProfilePicture(userId),
-                    getPostsByUser(userId)
+                    getUserData(id), // Use the user ID from params
+                    getUserProfilePicture(id),
+                    getPostsByUser(id)
                 ]);
 
                 setUserDetails(data);
@@ -52,14 +49,13 @@ const ProfilePage = () => {
         };
 
         fetchUserData();
-        
-        // Cleanup for profile picture URL
+
         return () => {
             if (profilePictureUrl) {
                 URL.revokeObjectURL(profilePictureUrl);
             }
         };
-    }, []); // Empty dependency array to ensure it runs only once
+    }, [id]); // Run this effect when the ID changes
 
     const openPostModal = (post: Post) => {
         setSelectedPost(post);
@@ -69,10 +65,10 @@ const ProfilePage = () => {
         setSelectedPost(null);
     };
 
-    if (loading) return <p>Loading...</p>; // Show loading state
-
     return (
         <div>
+            {loading && <p>Loading...</p>}
+            {error && <p style={{ color: 'red' }}>{error}</p>}
             {userDetails && (
                 <div>
                     {profilePictureUrl && (
@@ -107,4 +103,4 @@ const ProfilePage = () => {
     );
 };
 
-export default ProfilePage;
+export default ProfileDetailPage;
