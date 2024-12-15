@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { getUserData, getUserProfilePicture } from '../api/getUserData';
-import { getPostsByUser } from '../api/getPosts'; 
+import { getPostsByUser } from '../api/getPosts';
 import { UserDetailData } from '../models/user';
 import { Post } from '../models/post';
 import PostGrid from '../components/PostGrid';
 import PostModal from '../components/PostModal';
+import FollowerFollowing from '../components/FollowerFollowing';
+import FollowButton from '../components/FollowButton'; // FollowButton component
+import { getUserId } from '../services/authService';
 
 const ProfileDetailPage = () => {
     const { id } = useParams<{ id: string }>(); // Get the user ID from the route
@@ -17,6 +20,9 @@ const ProfileDetailPage = () => {
     const [selectedPost, setSelectedPost] = useState<Post | null>(null); // For modal
 
     const navigate = useNavigate();
+
+    // Get logged-in user's ID from localStorage
+    const loggedInUserId = getUserId();
 
     useEffect(() => {
         if (!id) {
@@ -84,6 +90,12 @@ const ProfileDetailPage = () => {
                     )}
                     <h2>Profile Information</h2>
                     <p><strong>Name:</strong> {userDetails.firstName} {userDetails.surName}</p>
+                    <FollowerFollowing userDetails={userDetails} />
+                    <FollowButton 
+                        userId={loggedInUserId || ''} // Pass the logged-in user's ID
+                        followerUserId={id || ''} // User being followed
+                        followers={userDetails.followers || []} 
+                    />
 
                     {/* Posts in grid layout */}
                     <h2>User Posts</h2>

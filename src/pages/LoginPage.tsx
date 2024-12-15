@@ -25,7 +25,7 @@ const LoginPage = () => {
         console.log('User ID:', response.userId);
         console.log('Token:', response.token);
         
-        navigate(`/postit/profile/${response.userId}`);
+        navigate(`/postit/profile/`);
       } else {
         setError('Invalid username or password.');
       }

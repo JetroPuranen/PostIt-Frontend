@@ -9,10 +9,20 @@ export interface UserRegistrationData {
     profilePicture: File;
   }
 
-export interface UserDetailData {
+  export interface FollowerFollowingData {
+    userId: string;
+    username: string;
+  }
+  
+  export interface UserDetailData {
     userId: string;
     username?: string;
     firstName?: string;
     surName?: string;
+    emailAddress?: string;
+    homeAddress?: string;
+    birthDay?: Date | string;
     profilePictureUrl?: string;
-}
+    followers?: FollowerFollowingData[]; 
+    following?: FollowerFollowingData[]; 
+  }
