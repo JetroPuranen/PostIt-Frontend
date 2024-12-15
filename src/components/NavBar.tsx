@@ -19,7 +19,7 @@ const Navbar: React.FC = () => {
                 {/* Use userId to navigate to the profile page */}
                 {userId && (
                     <li>
-                        <Link to={`/postit/profile/${userId}`}>Profile</Link>
+                        <Link to={`/postit/profile/`}>Profile</Link>
                     </li>
                 )}
             </ul>

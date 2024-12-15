@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getUserData, getUserProfilePicture } from '../api/getUserData';
@@ -8,6 +7,7 @@ import { UserDetailData } from '../models/user';
 import { Post } from '../models/post';
 import PostGrid from '../components/PostGrid';
 import PostModal from '../components/PostModal';
+import FollowerFollowing from '../components/FollowerFollowing';
 
 const ProfilePage = () => {
     const [userDetails, setUserDetails] = useState<UserDetailData | null>(null);
@@ -53,13 +53,12 @@ const ProfilePage = () => {
 
         fetchUserData();
         
-        // Cleanup for profile picture URL
         return () => {
             if (profilePictureUrl) {
                 URL.revokeObjectURL(profilePictureUrl);
             }
         };
-    }, []); // Empty dependency array to ensure it runs only once
+    }, []); 
 
     const openPostModal = (post: Post) => {
         setSelectedPost(post);
@@ -69,7 +68,7 @@ const ProfilePage = () => {
         setSelectedPost(null);
     };
 
-    if (loading) return <p>Loading...</p>; // Show loading state
+    if (loading) return <p>Loading...</p>;
 
     return (
         <div>
@@ -89,7 +88,8 @@ const ProfilePage = () => {
                     <h2>Profile Information</h2>
                     <p><strong>Name:</strong> {userDetails.firstName} {userDetails.surName}</p>
 
-                    {/* Posts in grid layout */}
+                    <FollowerFollowing userDetails={userDetails} />
+
                     <h2>User Posts</h2>
                     {posts.length > 0 ? (
                         <PostGrid posts={posts} openPostModal={openPostModal} />
@@ -97,7 +97,6 @@ const ProfilePage = () => {
                         <p>No posts available.</p>
                     )}
 
-                    {/* Modal for larger view */}
                     {selectedPost && (
                         <PostModal post={selectedPost} onClose={closePostModal} />
                     )}
